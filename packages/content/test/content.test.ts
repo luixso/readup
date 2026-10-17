@@ -1,6 +1,6 @@
 import { tokenize } from "@readup/core";
 import { describe, expect, it } from "vitest";
-import { TEXTS } from "../src";
+import { TECH_CATEGORIES, TEXTS } from "../src";
 
 // Validación automática de cada texto antes de publicarlo.
 describe.each(TEXTS)("texto $id", (text) => {
@@ -24,5 +24,16 @@ describe.each(TEXTS)("texto $id", (text) => {
 
   it("tiene un id único", () => {
     expect(TEXTS.filter((t) => t.id === text.id)).toHaveLength(1);
+  });
+});
+
+describe.each(TEXTS)("texto $id (metadatos)", (text) => {
+  it("los textos técnicos tienen categoría y los generales no", () => {
+    if (text.track === "tech") expect(TECH_CATEGORIES).toContain(text.category);
+    else expect(text.category).toBeUndefined();
+  });
+
+  it("las frases de shadowing no están vacías", () => {
+    expect(text.shadowing.length).toBeGreaterThan(0);
   });
 });

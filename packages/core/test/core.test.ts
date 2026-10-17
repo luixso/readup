@@ -8,6 +8,7 @@ import {
   minutesByStrand,
   phaseForWeek,
   sm2,
+  splitSentences,
   tokenize,
 } from "../src";
 
@@ -27,6 +28,15 @@ describe("tokenize", () => {
     expect(baseForms("making")).toContain("make");
     expect(baseForms("stopped")).toContain("stop");
     expect(baseForms("cities")).toContain("city");
+  });
+});
+
+describe("splitSentences", () => {
+  it("separa frases y conserva su posición", () => {
+    const text = 'She said "Hi!" Then she left.\n\nThe end';
+    const s = splitSentences(text);
+    expect(s.map((x) => x.text)).toEqual(['She said "Hi!"', "Then she left.", "The end"]);
+    for (const x of s) expect(text.slice(x.start, x.end)).toBe(x.text);
   });
 });
 

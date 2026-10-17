@@ -2,6 +2,7 @@ import type { GradedText } from "../types";
 
 export const aTripToTheCoast: GradedText = {
   id: "a-trip-to-the-coast",
+  track: "general",
   title: "A Trip to the Coast",
   titleEs: "Un viaje a la costa",
   cefr: "A2+",

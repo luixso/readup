@@ -15,7 +15,7 @@ cada texto en escucha, vocabulario con repetición espaciada, pronunciación y c
 ## Estructura
 
 ```
-apps/web           Next.js: biblioteca, lector con glosas y audio, preguntas, shadowing, repaso SRS
+apps/web           Next.js: biblioteca, inglés técnico IT, lector con glosas y audio, preguntas, shadowing, repaso SRS
 packages/core      Lógica de aprendizaje pura: tokenizador, cobertura léxica, SRS, curriculum
 packages/content   Textos graduados (glosas en español, preguntas, frases de shadowing), falsos amigos
 ```
@@ -30,8 +30,14 @@ pnpm dev         # http://localhost:3000
 
 Requisitos: Node 20+ y pnpm 10.
 
+## Audio
+
+La app usa las voces del sistema. Si no se oye nada, instala una voz en inglés:
+Windows → Configuración → Hora e idioma → Voz → Agregar voces → English (United States).
+En Chrome/Edge aparecen además voces neurales ("Natural", "Google") que suenan mucho mejor.
+
 ## Añadir un texto
 
-1. Crea `packages/content/src/texts/<id>.ts` siguiendo el tipo `GradedText`.
+1. Crea `packages/content/src/texts/<id>.ts` siguiendo el tipo `GradedText` (`track: "general"` o `"tech"` con su `category`).
 2. Regístralo en `packages/content/src/index.ts`.
 3. `pnpm test` valida longitud, glosas y preguntas.

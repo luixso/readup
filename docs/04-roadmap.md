@@ -7,6 +7,12 @@
 - [x] `@readup/content`: primeros textos A2 con glosas y preguntas, falsos amigos.
 - [x] `apps/web`: lector con glosas, audio TTS del navegador, preguntas y repaso SRS (estado local).
 
+## Sprint 0.5 — Audio, inglés técnico y nueva UI (hecho)
+- [x] Audio: selección explícita de voz inglesa (prioriza voces neurales), lectura frase a frase con resaltado, velocidad y selector de voz, aviso si no hay voces en inglés.
+- [x] Sección "Inglés técnico IT": 9 lecturas (Soporte IT, Redes, DevOps, Cloud, Seguridad, Agile) + guía de pronunciación de términos técnicos.
+- [x] Rediseño de la interfaz (Geist, tarjetas, hero, filtros, hoja de glosa, modo oscuro).
+- [x] 18 lecturas en total (A2 → B1) y progreso local (textos completados, palabras leídas).
+
 ## Sprint 1 — Contenido y lector (2 semanas)
 - [ ] Importar NGSL y bandas de frecuencia; recomendar textos por cobertura real.
 - [ ] 30 textos A2/A2+ en 6 colecciones temáticas.

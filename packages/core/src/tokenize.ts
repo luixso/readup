@@ -53,3 +53,26 @@ export function baseForms(word: string): string[] {
   if (w.endsWith("ly")) add(w.slice(0, -2));
   return [...forms];
 }
+
+export interface Sentence {
+  text: string;
+  /** Posición del primer carácter en el texto original. */
+  start: number;
+  end: number;
+}
+
+const SENTENCE_RE = /[^.!?\n]+(?:[.!?]+["”’)]?|$)/gm;
+
+/** Divide un texto en frases (para leerlas en voz alta una a una y resaltarlas). */
+export function splitSentences(text: string): Sentence[] {
+  const sentences: Sentence[] = [];
+  for (const match of text.matchAll(SENTENCE_RE)) {
+    const raw = match[0];
+    const lead = raw.length - raw.trimStart().length;
+    const trimmed = raw.trim();
+    if (!/[A-Za-z0-9]/.test(trimmed)) continue;
+    const start = (match.index ?? 0) + lead;
+    sentences.push({ text: trimmed, start, end: start + trimmed.length });
+  }
+  return sentences;
+}

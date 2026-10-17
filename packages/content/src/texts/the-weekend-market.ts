@@ -2,6 +2,7 @@ import type { GradedText } from "../types";
 
 export const theWeekendMarket: GradedText = {
   id: "the-weekend-market",
+  track: "general",
   title: "The Weekend Market",
   titleEs: "El mercado del fin de semana",
   cefr: "A2",

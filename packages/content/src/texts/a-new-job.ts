@@ -2,6 +2,7 @@ import type { GradedText } from "../types";
 
 export const aNewJob: GradedText = {
   id: "a-new-job",
+  track: "general",
   title: "A New Job",
   titleEs: "Un trabajo nuevo",
   cefr: "A2",

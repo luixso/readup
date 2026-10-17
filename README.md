@@ -11,6 +11,7 @@ cada texto en escucha, vocabulario con repetición espaciada, pronunciación y c
 | [02 · Producto](docs/02-plan-producto.md) | Bucle central, sesión diaria, curriculum de 12 meses, funcionalidades por versión |
 | [03 · Arquitectura](docs/03-arquitectura.md) | Monorepo, stack, modelo de datos, pipeline de contenido con IA, escalabilidad |
 | [04 · Roadmap](docs/04-roadmap.md) | Sprints de desarrollo |
+| [05 · Despliegue](docs/05-despliegue-vercel.md) | Publicar la app en Vercel |
 
 ## Estructura
 

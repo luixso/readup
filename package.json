@@ -1,0 +1,11 @@
+{
+  "name": "readup",
+  "private": true,
+  "packageManager": "pnpm@10.28.0",
+  "scripts": {
+    "dev": "pnpm --filter @readup/web dev",
+    "build": "pnpm --filter @readup/web build",
+    "test": "pnpm -r --if-present test",
+    "typecheck": "pnpm -r --if-present typecheck"
+  }
+}

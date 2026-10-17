@@ -13,6 +13,14 @@
 - [x] Rediseño de la interfaz (Geist, tarjetas, hero, filtros, hoja de glosa, modo oscuro).
 - [x] 18 lecturas en total (A2 → B1) y progreso local (textos completados, palabras leídas).
 
+## Sprint 0.6 — Docs oficiales, gramática, racha y diseño minimalista (hecho)
+- [x] Audio a 0.5× / 0.75× / 1× con pausas entre frases al ir lento; "Lento" en shadowing a 0.5×.
+- [x] `@readup/docs`: lector de wikis oficiales (Omarchy, Hyprland, GitHub, IA, ArchWiki, Proxmox, Docker, Kubernetes) con lista blanca de dominios, extracción con Readability y traducción de palabras (diccionario local + MyMemory).
+- [x] Racha diaria (al menos una lectura al día), compacta en el inicio.
+- [x] Inicio simplificado con tip del día; sección de Gramática A2–B1 (20 temas).
+- [x] Botón atrás del móvil: cierra la ficha de palabra y nunca saca de la app al entrar por un enlace.
+- [x] Interfaz minimalista en blanco y negro (Newsreader + Geist); color solo para nivel, área técnica y feedback.
+
 ## Sprint 1 — Contenido y lector (2 semanas)
 - [ ] Importar NGSL y bandas de frecuencia; recomendar textos por cobertura real.
 - [ ] 30 textos A2/A2+ en 6 colecciones temáticas.

@@ -16,6 +16,20 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const PREFS_KEY = "readup.voice.v1";
 
+/** Velocidades disponibles. 0.5 es claramente lento incluso en voces neurales. */
+export const RATES = [0.5, 0.75, 1] as const;
+const DEFAULT_RATE = 0.75;
+
+/** Ajusta velocidades guardadas de versiones anteriores (0.7, 0.9) a las disponibles. */
+function snapRate(rate: number): number {
+  return RATES.reduce((best, r) => (Math.abs(r - rate) < Math.abs(best - rate) ? r : best), DEFAULT_RATE);
+}
+
+/** Al ir lento, una pausa entre frases da tiempo a procesar lo escuchado. */
+function pauseAfterSentence(rate: number): number {
+  return rate < 1 ? Math.round(900 * (1 - rate)) : 0;
+}
+
 interface VoicePrefs {
   voiceName: string | null;
   rate: number;
@@ -24,11 +38,14 @@ interface VoicePrefs {
 function loadPrefs(): VoicePrefs {
   try {
     const raw = localStorage.getItem(PREFS_KEY);
-    if (raw) return { voiceName: null, rate: 0.9, ...(JSON.parse(raw) as Partial<VoicePrefs>) };
+    if (raw) {
+      const prefs = { voiceName: null, rate: DEFAULT_RATE, ...(JSON.parse(raw) as Partial<VoicePrefs>) };
+      return { ...prefs, rate: snapRate(prefs.rate) };
+    }
   } catch {
     // Sin almacenamiento: valores por defecto.
   }
-  return { voiceName: null, rate: 0.9 };
+  return { voiceName: null, rate: DEFAULT_RATE };
 }
 
 function savePrefs(prefs: VoicePrefs) {
@@ -81,7 +98,7 @@ export function useSpeech(): SpeechApi {
   const [supported, setSupported] = useState(true);
   const [ready, setReady] = useState(false);
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
-  const [prefs, setPrefs] = useState<VoicePrefs>({ voiceName: null, rate: 0.9 });
+  const [prefs, setPrefs] = useState<VoicePrefs>({ voiceName: null, rate: DEFAULT_RATE });
   const [playing, setPlaying] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   // Cada reproducción tiene un id; los eventos de reproducciones canceladas se ignoran.
@@ -160,7 +177,11 @@ export function useSpeech(): SpeechApi {
         }
         const u = makeUtterance(sentences[i]!, prefs.rate);
         u.onstart = () => id === runId.current && setActiveIndex(i);
-        u.onend = () => speakAt(i + 1);
+        u.onend = () => {
+          const pause = pauseAfterSentence(prefs.rate);
+          if (pause) setTimeout(() => speakAt(i + 1), pause);
+          else speakAt(i + 1);
+        };
         u.onerror = (e) => {
           // "interrupted"/"canceled" son esperables al parar.
           if (e.error !== "interrupted" && e.error !== "canceled") speakAt(i + 1);

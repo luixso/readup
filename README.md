@@ -16,9 +16,10 @@ cada texto en escucha, vocabulario con repetición espaciada, pronunciación y c
 ## Estructura
 
 ```
-apps/web           Next.js: biblioteca, inglés técnico IT, lector con glosas y audio, preguntas, shadowing, repaso SRS
-packages/core      Lógica de aprendizaje pura: tokenizador, cobertura léxica, SRS, curriculum
-packages/content   Textos graduados (glosas en español, preguntas, frases de shadowing), falsos amigos
+apps/web           Next.js: lecturas, documentación oficial, gramática, repaso SRS, racha
+packages/core      Lógica pura: tokenizador, frases, cobertura léxica, SRS, curriculum, racha
+packages/content   Textos graduados, gramática A2–B1, tips, falsos amigos, términos técnicos
+packages/docs      Catálogo de wikis oficiales, lista blanca de dominios y extractor de contenido
 ```
 
 ## Empezar
@@ -36,6 +37,13 @@ Requisitos: Node 20+ y pnpm 10.
 La app usa las voces del sistema. Si no se oye nada, instala una voz en inglés:
 Windows → Configuración → Hora e idioma → Voz → Agregar voces → English (United States).
 En Chrome/Edge aparecen además voces neurales ("Natural", "Google") que suenan mucho mejor.
+
+## Documentación oficial
+
+`/docs` permite leer wikis y guías oficiales (ArchWiki, Hyprland, Omarchy, GitHub Docs, Proxmox,
+Wikipedia, Docker, Kubernetes) con traducción al tocar palabras. El servidor (`/api/doc`) solo
+descarga páginas de los dominios de `packages/docs/src/sources.ts`. Para añadir un proyecto,
+agrega su dominio a `ALLOWED_HOSTS` y sus páginas a `DOC_PROJECTS`.
 
 ## Añadir un texto
 

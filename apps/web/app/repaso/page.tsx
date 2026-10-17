@@ -26,14 +26,9 @@ export default function ReviewPage() {
   if (!card) {
     return (
       <div className="narrow">
-        <section className="card flashcard">
-          <div style={{ fontSize: "3rem" }}>🎉</div>
-          <h1 style={{ fontSize: "1.8rem" }}>¡Todo repasado!</h1>
-          <p className="muted">Toca palabras mientras lees y pulsa “+ Repasar” para añadirlas a tu mazo.</p>
-          <Link href="/" className="btn primary" style={{ marginTop: 12 }}>
-            Ir a las lecturas
-          </Link>
-        </section>
+        <h1 className="title">Repaso</h1>
+        <p className="subtitle">No tienes palabras pendientes. Toca palabras mientras lees y pulsa «+ Repasar».</p>
+        <Link href="/lecturas" className="btn primary">Ir a las lecturas</Link>
       </div>
     );
   }
@@ -46,19 +41,18 @@ export default function ReviewPage() {
 
   return (
     <div className="narrow">
-      <div className="section-head">
-        <h2 style={{ marginTop: 0 }}>Repaso</h2>
-        <span className="chip">{queue.length} pendientes</span>
+      <div className="badges">
+        <span className="muted small">{queue.length} pendientes</span>
       </div>
-      <section className="card flashcard">
-        <h1>{card.term}</h1>
-        <button className="btn round" aria-label="Escuchar" onClick={() => speech.say(card.term, 0.8)}>
+      <section className="flashcard">
+        <p className="flash-term">{card.term}</p>
+        <button className="btn round" aria-label="Escuchar" onClick={() => speech.say(card.term, 0.75)}>
           🔊
         </button>
-        <p className="muted" style={{ fontStyle: "italic" }}>“{card.context}”</p>
+        <p className="context">“{card.context}”</p>
         {revealed ? (
           <>
-            <p className="answer">{card.es}</p>
+            <p className="flash-answer">{card.es}</p>
             <div className="grades">
               {GRADES.map((g) => (
                 <button key={g.grade} className="btn" onClick={() => grade(g.grade)}>
@@ -69,7 +63,7 @@ export default function ReviewPage() {
             </div>
           </>
         ) : (
-          <button className="btn primary" style={{ marginTop: 16 }} onClick={() => setRevealed(true)}>
+          <button className="btn primary" onClick={() => setRevealed(true)}>
             Mostrar significado
           </button>
         )}

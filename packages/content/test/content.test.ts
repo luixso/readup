@@ -37,3 +37,30 @@ describe.each(TEXTS)("texto $id (metadatos)", (text) => {
     expect(text.shadowing.length).toBeGreaterThan(0);
   });
 });
+
+import { GRAMMAR, TIPS, tipOfTheDay } from "../src";
+
+describe("gramática", () => {
+  it("ids únicos y todos los temas completos", () => {
+    expect(new Set(GRAMMAR.map((g) => g.id)).size).toBe(GRAMMAR.length);
+    for (const g of GRAMMAR) {
+      expect(g.uses.length, g.id).toBeGreaterThan(0);
+      expect(g.examples.length, g.id).toBeGreaterThan(0);
+      expect(g.mistakes.length, g.id).toBeGreaterThan(0);
+    }
+  });
+
+  it("cubre A2 y B1", () => {
+    expect(GRAMMAR.filter((g) => g.level === "A2").length).toBeGreaterThanOrEqual(8);
+    expect(GRAMMAR.filter((g) => g.level === "B1").length).toBeGreaterThanOrEqual(8);
+  });
+});
+
+describe("tips", () => {
+  it("el tip cambia cada día y es estable", () => {
+    const a = tipOfTheDay(new Date(2026, 9, 17, 8));
+    expect(tipOfTheDay(new Date(2026, 9, 17, 22))).toBe(a);
+    expect(tipOfTheDay(new Date(2026, 9, 18))).not.toBe(a);
+    expect(TIPS.length).toBeGreaterThanOrEqual(30);
+  });
+});

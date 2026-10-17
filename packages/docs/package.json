@@ -1,0 +1,22 @@
+{
+  "name": "@readup/docs",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@mozilla/readability": "0.6.0",
+    "linkedom": "0.18.12"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.9"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./extract": "./src/extract.ts"
+  }
+}

@@ -62,3 +62,5 @@ export function textsByTrack(track: Track): GradedText[] {
 export function getText(id: string): GradedText | undefined {
   return TEXTS.find((t) => t.id === id);
 }
+export * from "./tips";
+export * from "./grammar";

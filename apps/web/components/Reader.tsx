@@ -1,28 +1,23 @@
 "use client";
 
-import { type FalseFriend, type Gloss, type GradedText, findFalseFriend } from "@readup/content";
-import { analyzeCoverage, baseForms, splitSentences, tokenize } from "@readup/core";
-import Link from "next/link";
+import { type Gloss, type GradedText, findFalseFriend } from "@readup/content";
+import { analyzeCoverage, baseForms, tokenize } from "@readup/core";
 import { useEffect, useMemo, useState } from "react";
 import { AudioBar } from "@/components/AudioBar";
+import { BackLink } from "@/components/BackLink";
+import { LevelBadge, TechBadge } from "@/components/Badge";
+import { type Unit, UnitText, sentenceAt, useSentences } from "@/components/Tappable";
+import { WordSheet, type WordSelection } from "@/components/WordSheet";
 import { addCard } from "@/lib/deck";
+import { useCloseOnBack } from "@/lib/history";
 import { markCompleted } from "@/lib/progress";
 import { useSpeech } from "@/lib/speech";
 
-interface Selection {
-  word: string;
-  gloss?: Gloss;
-  falseFriend?: FalseFriend;
-  context: string;
-}
-
 const DIFFICULTY_LABEL = {
-  facil: "Lectura fluida",
-  optimo: "Zona óptima",
-  dificil: "Texto difícil",
+  facil: "lectura fluida",
+  optimo: "zona óptima",
+  dificil: "texto difícil",
 } as const;
-
-const WORD_RE = /[A-Za-z]+(?:['’][A-Za-z]+)*/g;
 
 function findGloss(text: GradedText, word: string): Gloss | undefined {
   const forms = baseForms(word);
@@ -34,22 +29,15 @@ function findGloss(text: GradedText, word: string): Gloss | undefined {
 
 export function Reader({ text }: { text: GradedText }) {
   const speech = useSpeech();
-  const [selected, setSelected] = useState<Selection | null>(null);
+  const [selected, setSelected] = useState<WordSelection | null>(null);
   const [tapped, setTapped] = useState<Set<string>>(new Set());
   const [saved, setSaved] = useState<Set<string>>(new Set());
   const [answers, setAnswers] = useState<Record<number, number>>({});
+  const closeSheet = useCloseOnBack(selected !== null, () => setSelected(null));
 
-  const sentences = useMemo(() => splitSentences(text.body), [text.body]);
+  const units: Unit[] = useMemo(() => text.body.split("\n\n").map((p) => ({ inlines: [{ t: p }] })), [text.body]);
+  const sentences = useSentences(units);
   const tokens = useMemo(() => tokenize(text.body), [text.body]);
-
-  const paragraphs = useMemo(() => {
-    let offset = 0;
-    return text.body.split("\n\n").map((p) => {
-      const start = text.body.indexOf(p, offset);
-      offset = start + p.length;
-      return { text: p, start };
-    });
-  }, [text.body]);
 
   // Cobertura estimada: todas las palabras se consideran conocidas salvo las que el usuario toca.
   const coverage = useMemo(() => {
@@ -64,33 +52,34 @@ export function Reader({ text }: { text: GradedText }) {
     if (finished) markCompleted(text.id, tokens.length, score);
   }, [finished, score, text.id, tokens.length]);
 
-  const sentenceIndexAt = (offset: number) =>
-    sentences.findIndex((s) => offset >= s.start && offset < s.end);
   const active = speech.activeIndex !== null ? sentences[speech.activeIndex] : undefined;
 
-  function onWord(surface: string, absoluteIndex: number) {
-    const word = surface.toLowerCase().replace(/’/g, "'");
+  function onWord(surface: string, unit: number, offset: number) {
+    const index = sentenceAt(sentences, unit, offset);
     if (speech.playing) {
       // Mientras suena el audio, tocar una palabra salta a su frase.
-      speech.playSentences(sentences.map((s) => s.text), Math.max(0, sentenceIndexAt(absoluteIndex)));
+      speech.playSentences(sentences.map((s) => s.text), Math.max(0, index));
       return;
     }
+    const word = surface.toLowerCase().replace(/’/g, "'");
+    const gloss = findGloss(text, word);
+    const falseFriend = findFalseFriend(word);
     setTapped((prev) => new Set(prev).add(word));
-    const sentence = sentences[sentenceIndexAt(absoluteIndex)];
     setSelected({
       word,
-      gloss: findGloss(text, word),
-      falseFriend: findFalseFriend(word),
-      context: sentence?.text ?? "",
+      term: gloss?.term ?? word,
+      es: gloss?.es ?? falseFriend?.means,
+      note: gloss?.note,
+      falseFriend,
+      context: sentences[index]?.text ?? "",
     });
   }
 
   function save() {
     if (!selected) return;
-    const es = selected.gloss?.es ?? selected.falseFriend?.means ?? "";
     addCard({
-      term: selected.gloss?.term ?? selected.word,
-      es: es || "(añade tu traducción)",
+      term: selected.term,
+      es: selected.es || "(añade tu traducción)",
       context: selected.context,
       textId: text.id,
     });
@@ -100,88 +89,43 @@ export function Reader({ text }: { text: GradedText }) {
   const tech = text.track === "tech";
 
   return (
-    <div className="narrow">
-      <Link href={tech ? "/tecnico" : "/"} className="back">
-        ← {tech ? "Inglés técnico" : "Biblioteca"}
-      </Link>
-      <div className="chips">
-        <span className={`chip ${tech ? "tech" : ""}`}>{text.cefr}</span>
-        <span className="chip neutral">{text.category ?? text.topic}</span>
-        <span className="chip neutral">{tokens.length} palabras</span>
+    <article className="narrow">
+      <BackLink fallback="/lecturas" label="Lecturas" />
+      <div className="badges">
+        <LevelBadge level={text.cefr} />
+        {tech && <TechBadge label={text.category} />}
+        <span className="muted small">
+          {tokens.length} palabras · {DIFFICULTY_LABEL[coverage.difficulty]} ({Math.round(coverage.coverage * 100)} %)
+        </span>
       </div>
-      <h1 className="reader-title">{text.title}</h1>
-      <p className="muted" style={{ margin: 0 }}>
-        {text.titleEs} · Cobertura {Math.round(coverage.coverage * 100)} % ({DIFFICULTY_LABEL[coverage.difficulty]})
-      </p>
+      <h1 className="title">{text.title}</h1>
+      <p className="subtitle">{text.titleEs}</p>
 
       <AudioBar speech={speech} sentences={sentences.map((s) => s.text)} />
 
-      <section className="card reader">
-        {paragraphs.map((p) => (
-          <p key={p.start}>
-            {splitWords(p.text).map((part, i) => {
-              if (!part.isWord) return <span key={i}>{part.text}</span>;
-              const abs = p.start + part.offset;
-              const lower = part.text.toLowerCase();
-              const cls = [
-                "word",
-                active && abs >= active.start && abs < active.end ? "speaking" : "",
-                selected?.word === lower ? "selected" : "",
-                saved.has(lower) ? "saved" : "",
-                findFalseFriend(lower) ? "ff" : "",
-              ].join(" ");
-              return (
-                <span key={i} className={cls} onClick={() => onWord(part.text, abs)}>
-                  {part.text}
-                </span>
-              );
-            })}
+      <div className="prose">
+        {units.map((u, i) => (
+          <p key={i}>
+            <UnitText unit={u} index={i} active={active} selected={selected?.word} saved={saved} onWord={onWord} />
           </p>
         ))}
-      </section>
-      <p className="muted" style={{ fontSize: "0.85rem" }}>
-        Toca cualquier palabra para ver su significado. Las palabras con subrayado ondulado son falsos amigos.
-      </p>
+      </div>
+      <p className="hint">Toca una palabra para ver su traducción. Subrayado ondulado: falso amigo.</p>
 
       {selected && (
-        <aside className="sheet" role="dialog" aria-label="Significado">
-          <div className="sheet-head">
-            <span className="sheet-term">{selected.gloss?.term ?? selected.word}</span>
-            <div style={{ display: "flex", gap: 8 }}>
-              <button
-                className="btn round"
-                aria-label="Escuchar"
-                onClick={() => speech.say(selected.gloss?.term ?? selected.word, 0.8)}
-              >
-                🔊
-              </button>
-              <button className="btn primary" onClick={save} disabled={saved.has(selected.word)}>
-                {saved.has(selected.word) ? "✓ Guardada" : "+ Repasar"}
-              </button>
-              <button className="btn round ghost" aria-label="Cerrar" onClick={() => setSelected(null)}>
-                ✕
-              </button>
-            </div>
-          </div>
-          {selected.gloss ? (
-            <p className="sheet-es">{selected.gloss.es}</p>
-          ) : (
-            <p className="sheet-es muted">Sin traducción todavía. Guárdala y añádela al repasar.</p>
-          )}
-          {selected.gloss?.note && <p className="muted" style={{ margin: 0 }}>{selected.gloss.note}</p>}
-          {selected.falseFriend && (
-            <div className="ff-box">
-              ⚠ Falso amigo: significa «{selected.falseFriend.means}», no {selected.falseFriend.notMeans}.
-            </div>
-          )}
-          {selected.context && <p className="context">“{selected.context}”</p>}
-        </aside>
+        <WordSheet
+          selection={selected}
+          saved={saved.has(selected.word)}
+          speech={speech}
+          onSave={save}
+          onClose={closeSheet}
+        />
       )}
 
       <h2>Comprensión</h2>
       {text.questions.map((q, qi) => (
-        <section key={qi} className="card question">
-          <strong>{q.prompt}</strong>
+        <section key={qi} className="question">
+          <p className="question-prompt">{q.prompt}</p>
           {q.options.map((opt, oi) => {
             const answered = answers[qi] !== undefined;
             const cls = !answered ? "" : oi === q.answerIndex ? "right" : oi === answers[qi] ? "wrong" : "";
@@ -199,38 +143,25 @@ export function Reader({ text }: { text: GradedText }) {
         </section>
       ))}
       {finished && (
-        <div className="result">
-          🎉 {score} de {text.questions.length} correctas · +{tokens.length} palabras leídas
-        </div>
+        <p className="result">
+          {score} de {text.questions.length} correctas · lectura completada, racha actualizada.
+        </p>
       )}
 
       <h2>Shadowing</h2>
-      <p className="muted" style={{ marginTop: -8 }}>
-        Escucha cada frase y repítela en voz alta justo detrás del audio, imitando el ritmo y la entonación.
-      </p>
-      {text.shadowing.map((s) => (
-        <section key={s} className="card shadow-row">
-          <span>{s}</span>
-          <div style={{ display: "flex", gap: 8, flex: "none" }}>
-            <button className="btn small" onClick={() => speech.say(s, 0.7)}>🐢 Lento</button>
-            <button className="btn small" onClick={() => speech.say(s, 1)}>▶ Normal</button>
+      <p className="muted">Escucha cada frase y repítela justo detrás del audio, imitando ritmo y entonación.</p>
+      <div className="list">
+        {text.shadowing.map((s) => (
+          <div key={s} className="shadow-row">
+            <span>{s}</span>
+            <span className="row">
+              <button className="btn small" onClick={() => speech.say(s, 0.5)}>Lento</button>
+              <button className="btn small" onClick={() => speech.say(s, 1)}>Normal</button>
+            </span>
           </div>
-        </section>
-      ))}
-      <div style={{ height: selected ? 200 : 0 }} />
-    </div>
+        ))}
+      </div>
+      <div style={{ height: selected ? 220 : 0 }} />
+    </article>
   );
-}
-
-function splitWords(paragraph: string) {
-  const parts: Array<{ text: string; isWord: boolean; offset: number }> = [];
-  let last = 0;
-  for (const m of paragraph.matchAll(WORD_RE)) {
-    const idx = m.index ?? 0;
-    if (idx > last) parts.push({ text: paragraph.slice(last, idx), isWord: false, offset: last });
-    parts.push({ text: m[0], isWord: true, offset: idx });
-    last = idx + m[0].length;
-  }
-  if (last < paragraph.length) parts.push({ text: paragraph.slice(last), isWord: false, offset: last });
-  return parts;
 }

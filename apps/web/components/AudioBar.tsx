@@ -1,12 +1,6 @@
 "use client";
 
-import type { SpeechApi } from "@/lib/speech";
-
-const RATES = [
-  { value: 0.7, label: "0.7×" },
-  { value: 0.9, label: "0.9×" },
-  { value: 1, label: "1×" },
-];
+import { RATES, type SpeechApi } from "@/lib/speech";
 
 interface Props {
   speech: SpeechApi;
@@ -23,10 +17,12 @@ export function AudioBar({ speech, sentences }: Props) {
       )}
       {noVoices && (
         <div className="notice">
-          No hay voces en inglés instaladas en este dispositivo. <br />
-          <strong>Windows:</strong> Configuración → Hora e idioma → Voz → Agregar voces → English (United States).{" "}
-          <strong>Android:</strong> Ajustes → Idioma → Salida de texto a voz → Instalar datos de voz → English.{" "}
-          <strong>iPhone/Mac:</strong> Accesibilidad → Contenido leído → Voces → English. Luego recarga la página.
+          No hay voces en inglés instaladas en este dispositivo.
+          <br />
+          <strong>Windows:</strong> Configuración → Hora e idioma → Voz → Agregar voces → English.{" "}
+          <strong>Android:</strong> Ajustes → Idioma → Salida de texto a voz → English.{" "}
+          <strong>iPhone/Mac:</strong> Accesibilidad → Contenido leído → Voces → English.{" "}
+          <strong>Linux:</strong> instala <code>speech-dispatcher</code> y <code>espeak-ng</code>. Luego recarga.
         </div>
       )}
       <div className="audio-bar">
@@ -38,27 +34,19 @@ export function AudioBar({ speech, sentences }: Props) {
         >
           {speech.playing ? "■" : "▶"}
         </button>
-        <div className="grow">
-          <div className="status">
-            {speech.playing && speech.activeIndex !== null ? (
-              <>
-                Frase <strong>{speech.activeIndex + 1}</strong> de {sentences.length} · toca una frase para saltar
-              </>
-            ) : (
-              <>
-                <strong>Escuchar mientras lees</strong> · {speech.voice ? speech.voice.name : "voz en inglés"}
-              </>
-            )}
-          </div>
+        <div className="grow status">
+          {speech.playing && speech.activeIndex !== null ? (
+            <>
+              Frase {speech.activeIndex + 1} / {sentences.length}
+            </>
+          ) : (
+            <>Escuchar</>
+          )}
         </div>
         <div className="segmented" role="group" aria-label="Velocidad">
           {RATES.map((r) => (
-            <button
-              key={r.value}
-              className={speech.rate === r.value ? "active" : ""}
-              onClick={() => speech.setRate(r.value)}
-            >
-              {r.label}
+            <button key={r} className={speech.rate === r ? "active" : ""} onClick={() => speech.setRate(r)}>
+              {r}×
             </button>
           ))}
         </div>
@@ -70,7 +58,7 @@ export function AudioBar({ speech, sentences }: Props) {
           >
             {speech.voices.map((v) => (
               <option key={v.name} value={v.name}>
-                {v.name.replace(/^(Microsoft|Google)\s*/, "")} ({v.lang})
+                {v.name.replace(/^(Microsoft|Google)\s*/, "").replace(/\s*-\s*English.*$/, "")} · {v.lang}
               </option>
             ))}
           </select>

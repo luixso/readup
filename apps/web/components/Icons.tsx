@@ -30,3 +30,6 @@ export const FlameIcon = ({ size = 18 }: { size?: number }) => (
     <path d="M12 22c4 0 7-2.7 7-6.6 0-3.5-2.3-5.6-4-7.4-.4 2-1.4 3.3-2.7 3.9C12.7 8.6 11.6 5 9 2c0 4-4 6.5-4 11.4C5 19.3 8 22 12 22z" />
   </svg>
 );
+export const UserIcon = () => (
+  <svg {...base} width={20} height={20}><circle cx="12" cy="8" r="4" /><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7" /></svg>
+);

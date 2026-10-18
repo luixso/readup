@@ -2,7 +2,9 @@ import { GeistSans } from "geist/font/sans";
 import type { Metadata, Viewport } from "next";
 import { Newsreader } from "next/font/google";
 import Link from "next/link";
+import { AccountLink } from "@/components/AccountLink";
 import { Nav } from "@/components/Nav";
+import { SyncAgent } from "@/lib/sync";
 import { BACK_GUARD_SCRIPT } from "@/lib/history";
 import "./globals.css";
 
@@ -38,11 +40,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Link href="/" className="brand">
               ReadUp
             </Link>
-            <Nav variant="top" />
+            <div className="topbar-right">
+              <Nav variant="top" />
+              <AccountLink />
+            </div>
           </div>
         </header>
         <main className="container">{children}</main>
         <Nav variant="bottom" />
+        <SyncAgent />
       </body>
     </html>
   );

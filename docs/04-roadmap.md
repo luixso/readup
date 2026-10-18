@@ -21,6 +21,10 @@
 - [x] Botón atrás del móvil: cierra la ficha de palabra y nunca saca de la app al entrar por un enlace.
 - [x] Interfaz minimalista en blanco y negro (Newsreader + Geist); color solo para nivel, área técnica y feedback.
 
+## Sprint 0.7 — Cuentas y Acerca de (hecho)
+- [x] Login con Supabase (enlace por email; GitHub/Google opcionales) y sincronización del progreso entre dispositivos con fusión sin pérdidas.
+- [x] Página «Acerca de» y donaciones (próximamente).
+
 ## Sprint 1 — Contenido y lector (2 semanas)
 - [ ] Importar NGSL y bandas de frecuencia; recomendar textos por cobertura real.
 - [ ] 30 textos A2/A2+ en 6 colecciones temáticas.

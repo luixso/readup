@@ -43,6 +43,10 @@ export default function Home() {
           </Link>
         ))}
       </div>
+
+      <p className="footer-note">
+        <Link href="/acerca" className="link">Acerca de ReadUp</Link> · Hecha por LUIXSO para la comunidad
+      </p>
     </div>
   );
 }

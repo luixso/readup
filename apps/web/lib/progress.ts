@@ -2,6 +2,7 @@
 
 import { computeStreak, dayKey, type StreakInfo } from "@readup/core";
 import { useEffect, useState } from "react";
+import { LOCAL_CHANGE, emit, useSyncVersion } from "@/lib/events";
 
 // Progreso local del MVP: lecturas completadas, documentos leídos y días con lectura (racha).
 const KEY = "readup.progress.v1";
@@ -29,12 +30,14 @@ export function loadProgress(): Progress {
   }
 }
 
-function save(progress: Progress) {
+/** Guarda el progreso. `notify: false` se usa al escribir datos que vienen de la nube. */
+export function saveProgress(progress: Progress, notify = true) {
   try {
     localStorage.setItem(KEY, JSON.stringify(progress));
   } catch {
     // Sin almacenamiento disponible: el progreso dura solo esta sesión.
   }
+  if (notify) emit(LOCAL_CHANGE);
 }
 
 function addToday(progress: Progress) {
@@ -46,20 +49,21 @@ export function markCompleted(textId: string, words: number, score: number) {
   const progress = loadProgress();
   progress.completed[textId] = { words, score, at: new Date().toISOString() };
   addToday(progress);
-  save(progress);
+  saveProgress(progress);
 }
 
 export function markDocRead(url: string, title: string, words: number) {
   const progress = loadProgress();
   progress.docs[url] = { title, words, at: new Date().toISOString() };
   addToday(progress);
-  save(progress);
+  saveProgress(progress);
 }
 
 /** Se lee tras montar para no romper la hidratación del HTML estático. */
 export function useProgress(): Progress | null {
   const [progress, setProgress] = useState<Progress | null>(null);
-  useEffect(() => setProgress(loadProgress()), []);
+  const version = useSyncVersion();
+  useEffect(() => setProgress(loadProgress()), [version]);
   return progress;
 }
 

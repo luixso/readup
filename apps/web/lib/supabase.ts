@@ -7,7 +7,9 @@ import { type SupabaseClient, createClient } from "@supabase/supabase-js";
  * Sin variables de entorno la app funciona igual, solo en local (ver docs/06-cuentas-supabase.md).
  */
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const anonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+// La integración Supabase ↔ Vercel crea una u otra según la versión (clave "anon" o "publishable").
+const anonKey =
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
 
 export const authEnabled = Boolean(url && anonKey);
 

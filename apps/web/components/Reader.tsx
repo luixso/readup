@@ -5,7 +5,7 @@ import { analyzeCoverage, baseForms, tokenize } from "@readup/core";
 import { useEffect, useMemo, useState } from "react";
 import { AudioBar } from "@/components/AudioBar";
 import { BackLink } from "@/components/BackLink";
-import { LevelBadge, TechBadge } from "@/components/Badge";
+import { LevelBadge, TrackBadge } from "@/components/Badge";
 import { type Unit, UnitText, sentenceAt, useSentences } from "@/components/Tappable";
 import { WordSheet, type WordSelection } from "@/components/WordSheet";
 import { addCard } from "@/lib/deck";
@@ -86,14 +86,12 @@ export function Reader({ text }: { text: GradedText }) {
     setSaved((prev) => new Set(prev).add(selected.word));
   }
 
-  const tech = text.track === "tech";
-
   return (
     <article className="narrow">
       <BackLink fallback="/lecturas" label="Lecturas" />
       <div className="badges">
         <LevelBadge level={text.cefr} />
-        {tech && <TechBadge label={text.category} />}
+        <TrackBadge track={text.track} label={text.category} />
         <span className="muted small">
           {tokens.length} palabras · {DIFFICULTY_LABEL[coverage.difficulty]} ({Math.round(coverage.coverage * 100)} %)
         </span>

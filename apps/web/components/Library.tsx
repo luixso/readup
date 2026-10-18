@@ -3,7 +3,7 @@
 import type { GradedText } from "@readup/content";
 import Link from "next/link";
 import { useState } from "react";
-import { LevelBadge, TechBadge } from "@/components/Badge";
+import { LevelBadge, TrackBadge } from "@/components/Badge";
 import { useProgress } from "@/lib/progress";
 
 export interface TextSummary {
@@ -16,12 +16,13 @@ export interface TextSummary {
   words: number;
 }
 
-const FILTERS = ["Todos", "A2", "A2+", "B1", "Técnico"] as const;
+const FILTERS = ["Todos", "A2", "A2+", "B1", "Cultura", "Técnico"] as const;
 type Filter = (typeof FILTERS)[number];
 
 function matches(t: TextSummary, f: Filter) {
   if (f === "Todos") return true;
   if (f === "Técnico") return t.track === "tech";
+  if (f === "Cultura") return t.track === "culture";
   return t.cefr === f;
 }
 
@@ -38,7 +39,7 @@ export function TextRow({ t, done }: { t: TextSummary; done?: boolean }) {
       <div className="row-meta">
         <div className="badges">
           <LevelBadge level={t.cefr} />
-          {t.track === "tech" && <TechBadge label={t.label} />}
+          <TrackBadge track={t.track} label={t.label} />
         </div>
         <span className="muted small">{Math.max(1, Math.round(t.words / 100))} min</span>
       </div>

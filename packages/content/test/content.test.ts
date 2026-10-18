@@ -1,6 +1,6 @@
 import { tokenize } from "@readup/core";
 import { describe, expect, it } from "vitest";
-import { TECH_CATEGORIES, TEXTS } from "../src";
+import { CULTURE_CATEGORIES, TECH_CATEGORIES, TEXTS } from "../src";
 
 // Validación automática de cada texto antes de publicarlo.
 describe.each(TEXTS)("texto $id", (text) => {
@@ -28,8 +28,9 @@ describe.each(TEXTS)("texto $id", (text) => {
 });
 
 describe.each(TEXTS)("texto $id (metadatos)", (text) => {
-  it("los textos técnicos tienen categoría y los generales no", () => {
+  it("cada colección usa sus propias categorías", () => {
     if (text.track === "tech") expect(TECH_CATEGORIES).toContain(text.category);
+    else if (text.track === "culture") expect(CULTURE_CATEGORIES).toContain(text.category);
     else expect(text.category).toBeUndefined();
   });
 

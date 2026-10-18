@@ -25,6 +25,9 @@
 - [x] Login con Supabase (enlace por email; GitHub/Google opcionales) y sincronización del progreso entre dispositivos con fusión sin pérdidas.
 - [x] Página «Acerca de» y donaciones (próximamente).
 
+## Sprint 0.8 — Cultura general (hecho)
+- [x] Nueva colección «Cultura general»: 12 lecturas A2+/B1 de historia, ciencia, arte, naturaleza y sociedad, con filtro y color propios.
+
 ## Sprint 1 — Contenido y lector (2 semanas)
 - [ ] Importar NGSL y bandas de frecuencia; recomendar textos por cobertura real.
 - [ ] 30 textos A2/A2+ en 6 colecciones temáticas.

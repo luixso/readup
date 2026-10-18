@@ -1,4 +1,4 @@
-import { GRAMMAR, TEXTS } from "@readup/content";
+import { GRAMMAR, TEXTS, textsByTrack } from "@readup/content";
 import { DOC_PROJECTS } from "@readup/docs";
 import Link from "next/link";
 import { DueCount } from "@/components/DueCount";
@@ -11,7 +11,12 @@ export default function Home() {
   const texts = TEXTS.map(summarize);
 
   const sections = [
-    { href: "/lecturas", title: "Lecturas", sub: `${texts.length} textos graduados, generales y técnicos` },
+    { href: "/lecturas", title: "Lecturas", sub: `${texts.length} textos graduados: vida diaria, cultura y técnica` },
+    {
+      href: "/lecturas?filtro=Cultura",
+      title: "Cultura general",
+      sub: `${textsByTrack("culture").length} textos de historia, ciencia, arte y naturaleza`,
+    },
     { href: "/docs", title: "Documentación técnica", sub: DOC_PROJECTS.map((p) => p.name).join(", ") },
     { href: "/gramatica", title: "Gramática A2–B1", sub: `${GRAMMAR.length} reglas explicadas en español` },
     { href: "/repaso", title: "Repaso", sub: "Tu vocabulario guardado", extra: <DueCount /> },

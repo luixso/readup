@@ -16,3 +16,14 @@ export function LevelBadge({ level }: { level: Cefr }) {
 export function TechBadge({ label = "Técnico" }: { label?: string }) {
   return <span className="badge tech">{label}</span>;
 }
+
+export function CultureBadge({ label = "Cultura" }: { label?: string }) {
+  return <span className="badge culture">{label}</span>;
+}
+
+/** Etiqueta de la colección: técnica, cultura general o ninguna (vida diaria). */
+export function TrackBadge({ track, label }: { track: "general" | "tech" | "culture"; label?: string }) {
+  if (track === "tech") return <TechBadge label={label} />;
+  if (track === "culture") return <CultureBadge label={label} />;
+  return null;
+}

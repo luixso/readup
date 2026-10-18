@@ -18,6 +18,7 @@
   --lv-b1p: #6741d9;
   --lv-b2: #c2255c;
   --tech: #e8590c;
+  --culture: #b5860b;
 
   --ok: #2f9e44;
   --bad: #e03131;
@@ -46,6 +47,7 @@
     --lv-b1p: #b197fc;
     --lv-b2: #faa2c1;
     --tech: #ffa94d;
+    --culture: #f2c94c;
     --ok: #69db7c;
     --bad: #ff8787;
     --speaking: #3a3418;
@@ -202,6 +204,7 @@ h2 {
 .badge.lv-b1p { --c: var(--lv-b1p); }
 .badge.lv-b2 { --c: var(--lv-b2); }
 .badge.tech { --c: var(--tech); }
+.badge.culture { --c: var(--culture); }
 .pill {
   min-width: 22px;
   height: 22px;

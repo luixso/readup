@@ -25,6 +25,14 @@ iniciar sesión y ver su avance en todos sus dispositivos. El plan gratuito es s
    https://github.com/settings/developers con la *callback URL* que te indica Supabase.
    Después añade `NEXT_PUBLIC_AUTH_PROVIDERS=github` (o `github,google`).
 
+### Problema frecuente: el enlace del email abre `http://localhost:3000/?code=…`
+
+Supabase manda al usuario a la **Site URL** cuando la dirección de retorno que pide la app
+no está en **Redirect URLs**. Solución: Site URL = tu URL de Vercel y añade en Redirect URLs
+`https://TU-PAGINA.vercel.app/**`. Después pide un enlace nuevo (los anteriores ya no sirven)
+y ábrelo **en el mismo navegador** donde lo pediste: el login usa PKCE y guarda una clave
+temporal en ese navegador.
+
 ## 3. Variables de entorno
 
 En Supabase: **Project Settings → API** (o el botón **Connect**) copia la *Project URL* y la

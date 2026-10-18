@@ -65,3 +65,21 @@ describe("tips", () => {
     expect(TIPS.length).toBeGreaterThanOrEqual(30);
   });
 });
+
+import { tokenize as tokenizeWords } from "@readup/core";
+import { lookupWord } from "../src";
+
+describe("diccionario", () => {
+  it("traduce todas las palabras de todas las lecturas", () => {
+    const missing = new Set<string>();
+    for (const t of TEXTS) for (const tok of tokenizeWords(t.body)) if (!lookupWord(tok.normalized)) missing.add(tok.normalized);
+    expect([...missing].sort()).toEqual([]);
+  });
+
+  it("resuelve formas derivadas a su forma base", () => {
+    expect(lookupWord("walked")).toMatchObject({ base: "walk" });
+    expect(lookupWord("bigger")).toMatchObject({ base: "big" });
+    expect(lookupWord("went")?.es).toContain("go");
+    expect(lookupWord("Athens")).toMatchObject({ properNoun: true });
+  });
+});

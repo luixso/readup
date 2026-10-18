@@ -28,6 +28,11 @@
 ## Sprint 0.8 — Cultura general (hecho)
 - [x] Nueva colección «Cultura general»: 12 lecturas A2+/B1 de historia, ciencia, arte, naturaleza y sociedad, con filtro y color propios.
 
+## Sprint 0.9 — Diccionario completo (hecho)
+- [x] Diccionario propio inglés → español (~1.400 entradas + nombres propios) que cubre todas las palabras de las lecturas; un test lo garantiza.
+- [x] Formas derivadas (walked, bigger, easiest) y verbos irregulares; palabras con acentos (Lucía, café).
+- [x] Corrección: las expresiones de varias palabras solo se muestran si la palabra tocada forma parte de ellas.
+
 ## Sprint 1 — Contenido y lector (2 semanas)
 - [ ] Importar NGSL y bandas de frecuencia; recomendar textos por cobertura real.
 - [ ] 30 textos A2/A2+ en 6 colecciones temáticas.

@@ -1,7 +1,7 @@
 "use client";
 
 import { findFalseFriend } from "@readup/content";
-import { type Sentence, splitSentences } from "@readup/core";
+import { type Sentence, WORD_RE, splitSentences } from "@readup/core";
 import { useMemo } from "react";
 
 /** Trozo de texto; el código se muestra en monoespaciada y no se puede tocar. */
@@ -29,8 +29,6 @@ export function useSentences(units: Unit[]): GlobalSentence[] {
     [units],
   );
 }
-
-const WORD_RE = /[A-Za-z]+(?:['’][A-Za-z]+)*/g;
 
 interface Props {
   unit: Unit;

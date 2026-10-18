@@ -5,7 +5,8 @@ export interface Token {
   index: number;
 }
 
-const WORD_RE = /[A-Za-z]+(?:['’][A-Za-z]+)*/g;
+// \p{L}: cualquier letra, incluidas las acentuadas (Lucía, café).
+export const WORD_RE = /\p{L}+(?:['’]\p{L}+)*/gu;
 
 /** Divide un texto en palabras inglesas (las contracciones cuentan como una palabra). */
 export function tokenize(text: string): Token[] {
@@ -51,6 +52,19 @@ export function baseForms(word: string): string[] {
     if (/(.)\1ing$/.test(w)) add(w.slice(0, -4));
   }
   if (w.endsWith("ly")) add(w.slice(0, -2));
+  // Comparativos y superlativos: bigger → big, larger → large, easiest → easy.
+  if (w.endsWith("ier")) add(w.slice(0, -3) + "y");
+  if (w.endsWith("iest")) add(w.slice(0, -4) + "y");
+  if (w.endsWith("er")) {
+    add(w.slice(0, -2));
+    add(w.slice(0, -1));
+    if (/(.)\1er$/.test(w)) add(w.slice(0, -3));
+  }
+  if (w.endsWith("est")) {
+    add(w.slice(0, -3));
+    add(w.slice(0, -2));
+    if (/(.)\1est$/.test(w)) add(w.slice(0, -4));
+  }
   return [...forms];
 }
 

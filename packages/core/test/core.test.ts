@@ -13,6 +13,10 @@ import {
 } from "../src";
 
 describe("tokenize", () => {
+  it("reconoce palabras con acentos", () => {
+    expect(tokenize("Lucía drinks café").map((t) => t.normalized)).toEqual(["lucía", "drinks", "café"]);
+  });
+
   it("cuenta las contracciones como una palabra", () => {
     expect(tokenize("I don't know, it's fine.").map((t) => t.normalized)).toEqual([
       "i",
@@ -28,6 +32,9 @@ describe("tokenize", () => {
     expect(baseForms("making")).toContain("make");
     expect(baseForms("stopped")).toContain("stop");
     expect(baseForms("cities")).toContain("city");
+    expect(baseForms("bigger")).toContain("big");
+    expect(baseForms("largest")).toContain("large");
+    expect(baseForms("easier")).toContain("easy");
   });
 });
 

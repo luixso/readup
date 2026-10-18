@@ -9,6 +9,7 @@ import { LevelBadge, TrackBadge } from "@/components/Badge";
 import { type Unit, UnitText, sentenceAt, useSentences } from "@/components/Tappable";
 import { WordSheet, type WordSelection } from "@/components/WordSheet";
 import { addCard } from "@/lib/deck";
+import { lookupOffline, translateOnline } from "@/lib/dictionary";
 import { useCloseOnBack } from "@/lib/history";
 import { markCompleted } from "@/lib/progress";
 import { useSpeech } from "@/lib/speech";
@@ -19,12 +20,20 @@ const DIFFICULTY_LABEL = {
   dificil: "texto difícil",
 } as const;
 
-function findGloss(text: GradedText, word: string): Gloss | undefined {
+/**
+ * Glosa del texto para la palabra tocada. Las expresiones de varias palabras ("in fact")
+ * solo cuentan si la palabra tocada forma parte de esa expresión en ese punto del texto.
+ */
+function findGloss(text: GradedText, word: string, paragraph: string, offset: number): Gloss | undefined {
+  const lower = paragraph.toLowerCase();
+  for (const g of text.glossary) {
+    if (!g.term.includes(" ")) continue;
+    for (let at = lower.indexOf(g.term); at !== -1; at = lower.indexOf(g.term, at + 1)) {
+      if (offset >= at && offset < at + g.term.length) return g;
+    }
+  }
   const forms = baseForms(word);
-  return (
-    text.glossary.find((g) => g.term === word) ??
-    text.glossary.find((g) => g.term.split(" ").some((part) => forms.includes(part)))
-  );
+  return text.glossary.find((g) => !g.term.includes(" ") && (g.term === word || forms.includes(g.term)));
 }
 
 export function Reader({ text }: { text: GradedText }) {
@@ -54,7 +63,7 @@ export function Reader({ text }: { text: GradedText }) {
 
   const active = speech.activeIndex !== null ? sentences[speech.activeIndex] : undefined;
 
-  function onWord(surface: string, unit: number, offset: number) {
+  async function onWord(surface: string, unit: number, offset: number) {
     const index = sentenceAt(sentences, unit, offset);
     if (speech.playing) {
       // Mientras suena el audio, tocar una palabra salta a su frase.
@@ -62,17 +71,25 @@ export function Reader({ text }: { text: GradedText }) {
       return;
     }
     const word = surface.toLowerCase().replace(/’/g, "'");
-    const gloss = findGloss(text, word);
     const falseFriend = findFalseFriend(word);
+    const context = sentences[index]?.text ?? "";
     setTapped((prev) => new Set(prev).add(word));
-    setSelected({
-      word,
-      term: gloss?.term ?? word,
-      es: gloss?.es ?? falseFriend?.means,
-      note: gloss?.note,
-      falseFriend,
-      context: sentences[index]?.text ?? "",
-    });
+
+    // 1) Glosa del propio texto (traducción según el contexto), 2) diccionario, 3) traductor en línea.
+    const paragraph = units[unit]!.inlines.map((i) => i.t).join("");
+    const gloss = findGloss(text, word, paragraph, offset);
+    if (gloss) {
+      setSelected({ word, term: gloss.term, es: gloss.es, note: gloss.note, falseFriend, context });
+      return;
+    }
+    const offline = lookupOffline(word);
+    if (offline) {
+      setSelected({ word, term: word, es: offline.es, note: offline.note, falseFriend, context });
+      return;
+    }
+    setSelected({ word, term: word, loading: true, falseFriend, context });
+    const es = await translateOnline(word);
+    setSelected((cur) => (cur?.word === word ? { word, term: word, es, falseFriend, context } : cur));
   }
 
   function save() {

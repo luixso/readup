@@ -90,3 +90,4 @@ export function getText(id: string): GradedText | undefined {
 }
 export * from "./tips";
 export * from "./grammar";
+export * from "./dictionary";

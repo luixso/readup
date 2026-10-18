@@ -1,6 +1,6 @@
 "use client";
 
-import { FALSE_FRIENDS, TECH_TERMS, TEXTS } from "@readup/content";
+import { FALSE_FRIENDS, TECH_TERMS, TEXTS, lookupWord } from "@readup/content";
 import { baseForms } from "@readup/core";
 
 /**
@@ -22,6 +22,12 @@ export function lookupOffline(word: string): { es: string; note?: string } | und
   for (const form of baseForms(word)) {
     const hit = dict.get(form);
     if (hit) return hit;
+  }
+  // Diccionario general (cubre todas las palabras de las lecturas y el vocabulario frecuente).
+  const entry = lookupWord(word);
+  if (entry) {
+    const note = entry.base ? `Forma de «${entry.base}».` : entry.properNoun ? "Nombre propio." : undefined;
+    return { es: entry.es, note };
   }
   return undefined;
 }

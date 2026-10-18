@@ -4,7 +4,7 @@ import Link from "next/link";
 import { DueCount } from "@/components/DueCount";
 import { NextReading } from "@/components/NextReading";
 import { StreakBar } from "@/components/StreakBar";
-import { TipOfTheDay } from "@/components/TipOfTheDay";
+import { Tips } from "@/components/Tips";
 import { summarize } from "@/lib/summaries";
 
 export default function Home() {
@@ -31,7 +31,7 @@ export default function Home() {
       <h2 className="label">Siguiente lectura</h2>
       <NextReading texts={texts} />
 
-      <TipOfTheDay />
+      <Tips />
 
       <h2 className="label">Explorar</h2>
       <div className="list">

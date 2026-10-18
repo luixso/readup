@@ -170,7 +170,7 @@ export function Reader({ text }: { text: GradedText }) {
           <div key={s} className="shadow-row">
             <span>{s}</span>
             <span className="row">
-              <button className="btn small" onClick={() => speech.say(s, 0.5)}>Lento</button>
+              <button className="btn small" onClick={() => speech.say(s, 0.25)}>Lento</button>
               <button className="btn small" onClick={() => speech.say(s, 1)}>Normal</button>
             </span>
           </div>

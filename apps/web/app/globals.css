@@ -312,9 +312,10 @@ a.row-link:hover { background: var(--soft); }
 .streak-hint { margin-left: auto; font-size: 0.82rem; }
 
 /* ---------- Tip ---------- */
-.tip { margin: 40px 0 0; padding: 20px 0 20px 20px; border-left: 2px solid var(--text); }
-.tip-title { font-family: var(--serif); font-size: 1.35rem; margin: 6px 0 4px; line-height: 1.25; }
-.tip-body { margin: 0; color: var(--muted); }
+.tip-row { padding: 14px 2px; border-bottom: 1px solid var(--line); }
+.tip-title { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 2px; line-height: 1.25; }
+.tip-body { margin: 0; color: var(--muted); font-size: 0.92rem; }
+.tips-more { margin-top: 12px; }
 
 /* ---------- Lector ---------- */
 .audio-bar {

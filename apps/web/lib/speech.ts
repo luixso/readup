@@ -16,8 +16,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 const PREFS_KEY = "readup.voice.v1";
 
-/** Velocidades disponibles. 0.5 es claramente lento incluso en voces neurales. */
-export const RATES = [0.5, 0.75, 1] as const;
+/** Velocidades disponibles (0.25 = muy lento, para frases difíciles). */
+export const RATES = [0.25, 0.5, 0.75, 1] as const;
 const DEFAULT_RATE = 0.75;
 
 /** Ajusta velocidades guardadas de versiones anteriores (0.7, 0.9) a las disponibles. */

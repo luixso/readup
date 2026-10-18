@@ -7,6 +7,15 @@ import { syncNow, useSession, useSyncStatus } from "@/lib/sync";
 
 const PROVIDER_LABEL = { github: "GitHub", google: "Google" } as const;
 
+/** Mensajes de Supabase traducidos y con una salida práctica. */
+function friendlyError(message: string): string {
+  if (/rate limit/i.test(message)) {
+    return "Se alcanzó el límite de emails de Supabase (el servicio de correo de prueba permite muy pocos por hora). Espera una hora o entra con GitHub.";
+  }
+  if (/invalid.*email/i.test(message)) return "El email no es válido.";
+  return message;
+}
+
 export default function AccountPage() {
   const { session, loading } = useSession();
 
@@ -69,7 +78,7 @@ function SignIn() {
               options: { emailRedirectTo: redirectTo },
             });
             if (error) {
-              setError(error.message);
+              setError(friendlyError(error.message));
               setState("error");
             } else setState("sent");
           }}

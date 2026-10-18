@@ -33,6 +33,11 @@ no está en **Redirect URLs**. Solución: Site URL = tu URL de Vercel y añade e
 y ábrelo **en el mismo navegador** donde lo pediste: el login usa PKCE y guarda una clave
 temporal en ese navegador.
 
+### Problema frecuente: «email rate limit exceeded»
+
+El correo de prueba de Supabase solo permite unos pocos emails por hora para todo el proyecto.
+Soluciones: entrar con **GitHub** (no usa email, ver paso 2.3) o configurar un SMTP propio.
+
 ## 3. Variables de entorno
 
 En Supabase: **Project Settings → API** (o el botón **Connect**) copia la *Project URL* y la

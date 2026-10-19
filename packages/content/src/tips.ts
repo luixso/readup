@@ -39,8 +39,13 @@ export const TIPS: Tip[] = [
 
 /** Un consejo distinto cada día, igual para todos los usuarios ese día. */
 export function tipOfTheDay(date: Date): Tip {
+  return TIPS[tipIndexOfTheDay(date)]!;
+}
+
+/** Posición en TIPS del consejo del día (el carrusel empieza ahí). */
+export function tipIndexOfTheDay(date: Date): number {
   const dayNumber = Math.floor(
     Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86_400_000,
   );
-  return TIPS[dayNumber % TIPS.length]!;
+  return dayNumber % TIPS.length;
 }

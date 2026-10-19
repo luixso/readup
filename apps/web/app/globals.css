@@ -312,10 +312,22 @@ a.row-link:hover { background: var(--soft); }
 .streak-hint { margin-left: auto; font-size: 0.82rem; }
 
 /* ---------- Tip ---------- */
-.tip-row { padding: 14px 2px; border-bottom: 1px solid var(--line); }
-.tip-title { font-family: var(--serif); font-size: 1.2rem; margin: 0 0 2px; line-height: 1.25; }
-.tip-body { margin: 0; color: var(--muted); font-size: 0.92rem; }
-.tips-more { margin-top: 12px; }
+.tip { padding: 4px 0 4px 20px; border-left: 2px solid var(--text); }
+.tip-title { font-family: var(--serif); font-size: 1.35rem; margin: 6px 0 4px; line-height: 1.25; }
+.tip-body { margin: 0; color: var(--muted); }
+.tip-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.tip-track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+}
+.tip-track::-webkit-scrollbar { display: none; }
+.tip-track:focus-visible { outline: 2px solid var(--text); outline-offset: 4px; }
+.tip-slide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; padding-right: 4px; }
+.tip-nav { display: flex; align-items: center; gap: 8px; margin-top: 14px; }
+.tip-nav .btn.round.small { width: 32px; }
 
 /* ---------- Lector ---------- */
 .audio-bar {

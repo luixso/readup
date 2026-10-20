@@ -21,7 +21,7 @@ export type Track = "general" | "tech" | "culture";
 
 export type TechCategory = "DevOps" | "Redes" | "Cloud" | "Seguridad" | "Soporte IT" | "Agile";
 
-export type CultureCategory = "Historia" | "Ciencia" | "Arte" | "Naturaleza" | "Sociedad";
+export type CultureCategory = "Historia" | "Ciencia" | "Arte" | "Naturaleza" | "Sociedad" | "Filosofía";
 
 export interface GradedText {
   id: string;

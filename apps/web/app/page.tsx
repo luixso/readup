@@ -13,9 +13,14 @@ export default function Home() {
   const sections = [
     { href: "/lecturas", title: "Lecturas", sub: `${texts.length} textos graduados: vida diaria, cultura y técnica` },
     {
+      href: "/lecturas?filtro=Filosof%C3%ADa",
+      title: "Filosofía moderna",
+      sub: `${TEXTS.filter((t) => t.category === "Filosofía").length} claves: Descartes, Kant, Nietzsche, Sartre…`,
+    },
+    {
       href: "/lecturas?filtro=Cultura",
       title: "Cultura general",
-      sub: `${textsByTrack("culture").length} textos de historia, ciencia, arte y naturaleza`,
+      sub: `${textsByTrack("culture").filter((t) => t.category !== "Filosofía").length} textos de historia, ciencia, arte y naturaleza`,
     },
     { href: "/docs", title: "Documentación técnica", sub: DOC_PROJECTS.map((p) => p.name).join(", ") },
     { href: "/gramatica", title: "Gramática A2–B1", sub: `${GRAMMAR.length} reglas explicadas en español` },

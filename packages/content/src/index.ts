@@ -1,3 +1,11 @@
+import { branches } from "./texts/philosophy/branches";
+import { descartes } from "./texts/philosophy/descartes";
+import { lockeHume } from "./texts/philosophy/locke-hume";
+import { kant } from "./texts/philosophy/kant";
+import { mill } from "./texts/philosophy/mill";
+import { nietzsche } from "./texts/philosophy/nietzsche";
+import { existentialism } from "./texts/philosophy/existentialism";
+import { wittgenstein } from "./texts/philosophy/wittgenstein";
 import { amazon } from "./texts/culture/amazon";
 import { blueSky } from "./texts/culture/blue-sky";
 import { coffee } from "./texts/culture/coffee";
@@ -68,6 +76,14 @@ export const TEXTS: GradedText[] = [
   blueSky,
   fridaKahlo,
   humanBrain,
+  branches,
+  descartes,
+  lockeHume,
+  kant,
+  mill,
+  nietzsche,
+  existentialism,
+  wittgenstein,
 ].sort((a, b) => CEFR_ORDER.indexOf(a.cefr) - CEFR_ORDER.indexOf(b.cefr));
 
 export const TECH_CATEGORIES: TechCategory[] = [
@@ -79,7 +95,7 @@ export const TECH_CATEGORIES: TechCategory[] = [
   "Agile",
 ];
 
-export const CULTURE_CATEGORIES: CultureCategory[] = ["Historia", "Ciencia", "Arte", "Naturaleza", "Sociedad"];
+export const CULTURE_CATEGORIES: CultureCategory[] = ["Historia", "Ciencia", "Arte", "Naturaleza", "Sociedad", "Filosofía"];
 
 export function textsByTrack(track: Track): GradedText[] {
   return TEXTS.filter((t) => t.track === track);

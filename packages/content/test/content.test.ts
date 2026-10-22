@@ -1,6 +1,6 @@
 import { tokenize } from "@readup/core";
 import { describe, expect, it } from "vitest";
-import { CULTURE_CATEGORIES, TECH_CATEGORIES, TEXTS } from "../src";
+import { ALBUMS, CULTURE_CATEGORIES, MUSIC_CATEGORIES, TECH_CATEGORIES, TEXTS, getText } from "../src";
 
 // Validación automática de cada texto antes de publicarlo.
 describe.each(TEXTS)("texto $id", (text) => {
@@ -31,12 +31,35 @@ describe.each(TEXTS)("texto $id (metadatos)", (text) => {
   it("cada colección usa sus propias categorías", () => {
     if (text.track === "tech") expect(TECH_CATEGORIES).toContain(text.category);
     else if (text.track === "culture") expect(CULTURE_CATEGORIES).toContain(text.category);
+    else if (text.track === "music") expect(MUSIC_CATEGORIES).toContain(text.category);
     else expect(text.category).toBeUndefined();
   });
 
   it("las frases de shadowing no están vacías", () => {
     expect(text.shadowing.length).toBeGreaterThan(0);
   });
+});
+
+describe.each(ALBUMS)("disco $id", (album) => {
+  it("sus fichas existen y son de música del mismo artista", () => {
+    for (const id of album.textIds) {
+      const t = getText(id);
+      expect(t, id).toBeDefined();
+      expect(t!.track).toBe("music");
+      expect(t!.category).toBe(album.artist);
+    }
+  });
+
+  it("las pistas van numeradas en orden y tienen descripción", () => {
+    album.songs.forEach((s, i) => {
+      expect(s.n).toBe(i + 1);
+      expect(s.aboutEs.length, s.title).toBeGreaterThan(20);
+    });
+  });
+});
+
+it("los discos tienen ids únicos", () => {
+  expect(new Set(ALBUMS.map((a) => a.id)).size).toBe(ALBUMS.length);
 });
 
 import { GRAMMAR, TIPS, tipOfTheDay } from "../src";

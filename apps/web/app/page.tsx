@@ -1,4 +1,4 @@
-import { GRAMMAR, TEXTS, textsByTrack } from "@readup/content";
+import { ALBUMS, GRAMMAR, TEXTS, textsByTrack } from "@readup/content";
 import { DOC_PROJECTS } from "@readup/docs";
 import Link from "next/link";
 import { DueCount } from "@/components/DueCount";
@@ -22,6 +22,7 @@ export default function Home() {
       title: "Cultura general",
       sub: `${textsByTrack("culture").filter((t) => t.category !== "Filosofía").length} textos de historia, ciencia, arte y naturaleza`,
     },
+    { href: "/musica", title: "Música", sub: ALBUMS.map((a) => `${a.title} (${a.artist})`).join(", ") },
     { href: "/docs", title: "Documentación técnica", sub: DOC_PROJECTS.map((p) => p.name).join(", ") },
     { href: "/gramatica", title: "Gramática A2–B1", sub: `${GRAMMAR.length} reglas explicadas en español` },
     { href: "/repaso", title: "Repaso", sub: "Tu vocabulario guardado", extra: <DueCount /> },

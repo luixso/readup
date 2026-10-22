@@ -2,11 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookIcon, HomeIcon, RepeatIcon, RuleIcon, TerminalIcon } from "@/components/Icons";
+import { BookIcon, HomeIcon, MusicIcon, RepeatIcon, RuleIcon, TerminalIcon } from "@/components/Icons";
 
 const LINKS = [
   { href: "/", label: "Inicio", icon: HomeIcon, match: (p: string) => p === "/" },
   { href: "/lecturas", label: "Lecturas", icon: BookIcon, match: (p: string) => p.startsWith("/lecturas") || p.startsWith("/leer") },
+  { href: "/musica", label: "Música", icon: MusicIcon, match: (p: string) => p.startsWith("/musica") },
   { href: "/docs", label: "Docs", icon: TerminalIcon, match: (p: string) => p.startsWith("/docs") },
   { href: "/gramatica", label: "Gramática", icon: RuleIcon, match: (p: string) => p.startsWith("/gramatica") },
   { href: "/repaso", label: "Repaso", icon: RepeatIcon, match: (p: string) => p.startsWith("/repaso") },

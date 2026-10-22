@@ -21,9 +21,14 @@ export function CultureBadge({ label = "Cultura" }: { label?: string }) {
   return <span className="badge culture">{label}</span>;
 }
 
-/** Etiqueta de la colección: técnica, cultura general o ninguna (vida diaria). */
-export function TrackBadge({ track, label }: { track: "general" | "tech" | "culture"; label?: string }) {
+export function MusicBadge({ label = "Música" }: { label?: string }) {
+  return <span className="badge music">{label}</span>;
+}
+
+/** Etiqueta de la colección: técnica, cultura general, música o ninguna (vida diaria). */
+export function TrackBadge({ track, label }: { track: "general" | "tech" | "culture" | "music"; label?: string }) {
   if (track === "tech") return <TechBadge label={label} />;
   if (track === "culture") return <CultureBadge label={label} />;
+  if (track === "music") return <MusicBadge label={label} />;
   return null;
 }

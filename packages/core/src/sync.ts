@@ -2,7 +2,8 @@
  * Fusión del progreso entre dispositivos. Nunca se pierde avance:
  * - días de racha: unión;
  * - lecturas y documentos: unión, gana el registro más reciente;
- * - tarjetas: unión, gana la que se modificó (añadió o repasó) más tarde.
+ * - tarjetas: unión, gana la que se modificó (añadió o repasó) más tarde;
+ * - letras pegadas por el usuario: unión, gana la edición más reciente (borrar = texto vacío).
  */
 export interface Timestamped {
   /** ISO 8601. */
@@ -19,6 +20,7 @@ export interface SyncState<C extends SyncCard = SyncCard, R extends Timestamped 
   docs: Record<string, D>;
   days: string[];
   cards: C[];
+  lyrics?: Record<string, Timestamped>;
 }
 
 function newer<T extends Timestamped>(a: T | undefined, b: T | undefined): T {
@@ -51,5 +53,6 @@ export function mergeState<C extends SyncCard, R extends Timestamped, D extends 
     docs: mergeRecords(local.docs, remote.docs ?? {}),
     days: [...new Set([...local.days, ...(remote.days ?? [])])].sort(),
     cards: mergeCards(local.cards, remote.cards ?? []),
+    lyrics: mergeRecords(local.lyrics ?? {}, remote.lyrics ?? {}),
   };
 }

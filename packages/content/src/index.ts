@@ -18,6 +18,12 @@ import { marieCurie } from "./texts/culture/marie-curie";
 import { moonLanding } from "./texts/culture/moon-landing";
 import { olympics } from "./texts/culture/olympics";
 import { printingPress } from "./texts/culture/printing-press";
+import { californicationSongs } from "./texts/music/californication-songs";
+import { californicationStory } from "./texts/music/californication-story";
+import { okComputerSongs } from "./texts/music/ok-computer-songs";
+import { okComputerStory } from "./texts/music/ok-computer-story";
+import { reggattaSongs } from "./texts/music/reggatta-songs";
+import { reggattaStory } from "./texts/music/reggatta-story";
 import { aDayWithoutTheInternet } from "./texts/a-day-without-the-internet";
 import { aNewJob } from "./texts/a-new-job";
 import { aTripToTheCoast } from "./texts/a-trip-to-the-coast";
@@ -36,11 +42,12 @@ import { theLostPhone } from "./texts/the-lost-phone";
 import { theNightBus } from "./texts/the-night-bus";
 import { theWeekendMarket } from "./texts/the-weekend-market";
 import { whyWeNeedSleep } from "./texts/why-we-need-sleep";
-import type { CultureCategory, GradedText, TechCategory, Track } from "./types";
+import type { CultureCategory, GradedText, MusicCategory, TechCategory, Track } from "./types";
 
 export * from "./types";
 export * from "./false-friends";
 export * from "./tech-terms";
+export * from "./albums";
 
 const CEFR_ORDER = ["A2", "A2+", "B1", "B1+", "B2"];
 
@@ -84,6 +91,12 @@ export const TEXTS: GradedText[] = [
   nietzsche,
   existentialism,
   wittgenstein,
+  reggattaStory,
+  reggattaSongs,
+  okComputerStory,
+  okComputerSongs,
+  californicationStory,
+  californicationSongs,
 ].sort((a, b) => CEFR_ORDER.indexOf(a.cefr) - CEFR_ORDER.indexOf(b.cefr));
 
 export const TECH_CATEGORIES: TechCategory[] = [
@@ -96,6 +109,8 @@ export const TECH_CATEGORIES: TechCategory[] = [
 ];
 
 export const CULTURE_CATEGORIES: CultureCategory[] = ["Historia", "Ciencia", "Arte", "Naturaleza", "Sociedad", "Filosofía"];
+
+export const MUSIC_CATEGORIES: MusicCategory[] = ["The Police", "Radiohead", "Red Hot Chili Peppers"];
 
 export function textsByTrack(track: Track): GradedText[] {
   return TEXTS.filter((t) => t.track === track);

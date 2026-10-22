@@ -22,6 +22,9 @@ export const TerminalIcon = () => (
 export const RuleIcon = () => (
   <svg {...base}><path d="M4 6h16M4 12h10M4 18h7" /></svg>
 );
+export const MusicIcon = () => (
+  <svg {...base}><path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" /></svg>
+);
 export const RepeatIcon = () => (
   <svg {...base}><path d="M17 2l4 4-4 4" /><path d="M3 11V9a3 3 0 0 1 3-3h15" /><path d="M7 22l-4-4 4-4" /><path d="M21 13v2a3 3 0 0 1-3 3H3" /></svg>
 );

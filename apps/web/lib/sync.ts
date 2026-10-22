@@ -5,6 +5,7 @@ import type { Session } from "@supabase/supabase-js";
 import { useEffect, useState } from "react";
 import { type StoredCard, loadDeck, saveDeck } from "@/lib/deck";
 import { LOCAL_CHANGE, SYNCED, emit } from "@/lib/events";
+import { type StoredLyrics, loadLyrics, saveAllLyrics } from "@/lib/lyrics";
 import { loadProgress, saveProgress } from "@/lib/progress";
 import { getSupabase } from "@/lib/supabase";
 
@@ -73,7 +74,13 @@ async function doSync() {
     if (error) throw error;
 
     const progress = loadProgress();
-    const local = { completed: progress.completed, docs: progress.docs, days: progress.days, cards: loadDeck() };
+    const local = {
+      completed: progress.completed,
+      docs: progress.docs,
+      days: progress.days,
+      cards: loadDeck(),
+      lyrics: loadLyrics(),
+    };
     const merged = mergeState<StoredCard, (typeof local.completed)[string], (typeof local.docs)[string]>(
       local,
       (row?.data ?? {}) as Partial<typeof local>,
@@ -81,6 +88,7 @@ async function doSync() {
 
     saveProgress({ completed: merged.completed, docs: merged.docs, days: merged.days }, false);
     saveDeck(merged.cards, false);
+    saveAllLyrics((merged.lyrics ?? {}) as Record<string, StoredLyrics>, false);
     emit(SYNCED);
 
     const at = new Date().toISOString();

@@ -46,6 +46,13 @@ Wikipedia, Docker, Kubernetes) con traducción al tocar palabras. El servidor (`
 descarga páginas de los dominios de `packages/docs/src/sources.ts`. Para añadir un proyecto,
 agrega su dominio a `ALLOWED_HOSTS` y sus páginas a `DOC_PROJECTS`.
 
+## Música
+
+`/musica` reúne discos completos en inglés (`packages/content/src/albums.ts`): cada disco tiene
+fichas de lectura propias (`texts/music/`) y una página por canción con su tema explicado en español.
+La app **no incluye letras** (tienen derechos de autor): el usuario pega la letra oficial y, si quiere,
+su traducción línea a línea. Se guarda en el navegador y se sincroniza con su cuenta (`lib/lyrics.ts`).
+
 ## Añadir un texto
 
 1. Crea `packages/content/src/texts/<id>.ts` siguiendo el tipo `GradedText` (`track: "general"` o `"tech"` con su `category`).

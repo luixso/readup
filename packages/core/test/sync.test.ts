@@ -37,6 +37,15 @@ describe("mergeState", () => {
   });
 
   it("acepta un estado remoto vacío", () => {
-    expect(mergeState(phone, {})).toEqual({ ...phone, days: [...phone.days].sort() });
+    expect(mergeState(phone, {})).toEqual({ ...phone, days: [...phone.days].sort(), lyrics: {} });
+  });
+
+  it("conserva la edición más reciente de cada letra", () => {
+    const m = mergeState(
+      { ...phone, lyrics: { "a/1": { at: "2026-10-12T10:00:00Z" }, "a/2": { at: "2026-10-10T10:00:00Z" } } },
+      { lyrics: { "a/1": { at: "2026-10-11T10:00:00Z" }, "a/3": { at: "2026-10-11T10:00:00Z" } } },
+    );
+    expect(Object.keys(m.lyrics ?? {}).sort()).toEqual(["a/1", "a/2", "a/3"]);
+    expect(m.lyrics?.["a/1"]?.at).toBe("2026-10-12T10:00:00Z");
   });
 });

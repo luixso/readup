@@ -105,7 +105,11 @@ export function Reader({ text }: { text: GradedText }) {
 
   return (
     <article className="narrow">
-      <BackLink fallback="/lecturas" label="Lecturas" />
+      {text.track === "music" ? (
+        <BackLink fallback="/musica" label="Música" />
+      ) : (
+        <BackLink fallback="/lecturas" label="Lecturas" />
+      )}
       <div className="badges">
         <LevelBadge level={text.cefr} />
         <TrackBadge track={text.track} label={text.category} />

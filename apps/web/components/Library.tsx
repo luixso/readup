@@ -16,7 +16,7 @@ export interface TextSummary {
   words: number;
 }
 
-const FILTERS = ["Todos", "A2", "A2+", "B1", "Cultura", "Filosofía", "Técnico"] as const;
+const FILTERS = ["Todos", "A2", "A2+", "B1", "Cultura", "Filosofía", "Música", "Técnico"] as const;
 type Filter = (typeof FILTERS)[number];
 
 function matches(t: TextSummary, f: Filter) {
@@ -24,6 +24,7 @@ function matches(t: TextSummary, f: Filter) {
   if (f === "Técnico") return t.track === "tech";
   if (f === "Filosofía") return t.label === "Filosofía";
   if (f === "Cultura") return t.track === "culture" && t.label !== "Filosofía";
+  if (f === "Música") return t.track === "music";
   return t.cefr === f;
 }
 
